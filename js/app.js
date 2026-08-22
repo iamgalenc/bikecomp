@@ -16,6 +16,11 @@
         els.btnPause.addEventListener("click", onPause);
         els.btnResume.addEventListener("click", onResume);
         els.btnStop.addEventListener("click", onStop);
+        els.btnFullscreen.addEventListener("click", onToggleFullscreen);
+
+        if (!isFullscreenSupported()) {
+            els.btnFullscreen.classList.add("hidden");
+        }
 
         MapModule.init();
         /* wait for layout before sizing the map */
@@ -27,6 +32,31 @@
         UI.setGpsStatus("off", "GPS OFF");
 
         startClock();
+    }
+
+    function isFullscreenSupported() {
+        return !!(document.documentElement.requestFullscreen ||
+                  document.documentElement.webkitRequestFullscreen ||
+                  document.documentElement.mozRequestFullScreen ||
+                  document.documentElement.msRequestFullscreen);
+    }
+
+    function onToggleFullscreen() {
+        var doc = document;
+        var el = doc.documentElement;
+
+        if (doc.fullscreenElement || doc.webkitFullscreenElement ||
+            doc.mozFullScreenElement || doc.msFullscreenElement) {
+            if (doc.exitFullscreen) doc.exitFullscreen();
+            else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen();
+            else if (doc.mozCancelFullScreen) doc.mozCancelFullScreen();
+            else if (doc.msExitFullscreen) doc.msExitFullscreen();
+        } else {
+            if (el.requestFullscreen) el.requestFullscreen();
+            else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+            else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
+            else if (el.msRequestFullscreen) el.msRequestFullscreen();
+        }
     }
 
     function onStart() {
