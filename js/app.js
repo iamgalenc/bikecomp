@@ -16,25 +16,14 @@
         els.btnPause.addEventListener("click", onPause);
         els.btnResume.addEventListener("click", onResume);
         els.btnStop.addEventListener("click", onStop);
-        els.btnMap.addEventListener("click", onToggleMap);
 
         MapModule.init();
-        if (MapModule.enabled) {
-            els.btnMap.classList.remove("hidden");
-        }
+        MapModule.invalidate();
 
         UI.showPermissionBanner(false);
         UI.setGpsStatus("off", "GPS OFF");
 
         startClock();
-    }
-
-    function onToggleMap() {
-        if (MapModule.visible) {
-            MapModule.hide();
-        } else {
-            MapModule.show();
-        }
     }
 
     function onStart() {
@@ -96,7 +85,6 @@
         els.btnPause.classList.add("hidden");
         els.btnResume.classList.add("hidden");
         els.btnStart.classList.remove("hidden");
-        els.btnMap.classList.remove("hidden");
 
         MapModule.reset();
         lastTrackIndex = 0;

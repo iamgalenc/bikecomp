@@ -75,24 +75,9 @@
         }
     };
 
-    MapModule.show = function () {
-        if (!this.enabled) return;
-        var panel = document.getElementById("map-panel");
-        if (panel) {
-            panel.classList.remove("hidden");
-            this.visible = true;
-            /* Leaflet needs an invalidateSize() when the container becomes visible */
-            setTimeout(function () {
-                this._map && this._map.invalidateSize();
-            }.bind(this), 50);
-        }
-    };
-
-    MapModule.hide = function () {
-        var panel = document.getElementById("map-panel");
-        if (panel) {
-            panel.classList.add("hidden");
-            this.visible = false;
+    MapModule.invalidate = function () {
+        if (this.enabled) {
+            this._map && this._map.invalidateSize();
         }
     };
 
