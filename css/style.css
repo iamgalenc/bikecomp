@@ -162,6 +162,68 @@ body {
 .btn-resume { background: #17a2b8; }
 .btn-stop   { background: #dc3545; }
 
+/* ---- Map panel ---- */
+.map-panel {
+    flex-shrink: 0;
+    height: 45vh;
+    max-height: 380px;
+    border-top: 1px solid #2a2f38;
+    background: #1a1e24;
+    position: relative;
+}
+
+#map {
+    position: absolute;
+    inset: 0;
+    background: #1a1e24;
+}
+
+.btn-map {
+    background: #6f42c1;
+}
+
+/* Custom position marker */
+.position-marker {
+    width: 18px;
+    height: 18px;
+    background: #28a745;
+    border: 3px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.8);
+}
+
+/* Ride track line */
+.ride-track {
+    stroke: #17a2b8;
+    stroke-width: 4;
+    stroke-opacity: 0.9;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+    fill: none;
+}
+
+/* Dark Leaflet tiles */
+.leaflet-container {
+    background: #1a1e24;
+    font-family: inherit;
+}
+
+/* Keep map controls visible on dark background */
+.leaflet-bar a {
+    background: #2a2f38;
+    color: #e8eaed;
+    border-color: #3a4150;
+}
+
+.leaflet-control-attribution {
+    background: rgba(26, 30, 36, 0.7) !important;
+    color: #9aa0a6 !important;
+}
+
+.leaflet-control-attribution a {
+    color: #9aa0a6 !important;
+}
+
 /* ---- Permission banner ---- */
 .permission-banner {
     position: fixed;

@@ -5,6 +5,7 @@
     var processor = new RideProcessor();
     var clockInterval = null;
     var screenWake = null;
+    var lastTrackIndex = 0;
 
     function init() {
         UI.cacheElements();
@@ -15,11 +16,25 @@
         els.btnPause.addEventListener("click", onPause);
         els.btnResume.addEventListener("click", onResume);
         els.btnStop.addEventListener("click", onStop);
+        els.btnMap.addEventListener("click", onToggleMap);
+
+        MapModule.init();
+        if (MapModule.enabled) {
+            els.btnMap.classList.remove("hidden");
+        }
 
         UI.showPermissionBanner(false);
         UI.setGpsStatus("off", "GPS OFF");
 
         startClock();
+    }
+
+    function onToggleMap() {
+        if (MapModule.visible) {
+            MapModule.hide();
+        } else {
+            MapModule.show();
+        }
     }
 
     function onStart() {
@@ -81,6 +96,10 @@
         els.btnPause.classList.add("hidden");
         els.btnResume.classList.add("hidden");
         els.btnStart.classList.remove("hidden");
+        els.btnMap.classList.remove("hidden");
+
+        MapModule.reset();
+        lastTrackIndex = 0;
 
         UI.setGpsStatus("off", "GPS OFF");
         releaseWakeLock();
@@ -91,6 +110,21 @@
 
         var state = processor.state;
         var accuracy = state.gpsAccuracy;
+
+        /* feed the map with the live position */
+        if (typeof state.gpsAccuracy === "number" &&
+            typeof pos.coords.latitude === "number") {
+            MapModule.updatePosition(pos.coords.latitude, pos.coords.longitude, state.gpsAccuracy);
+        }
+
+        /* append new track points since last update */
+        var track = state.gpsTrack;
+        var i;
+        for (i = lastTrackIndex; i < track.length; i++) {
+            MapModule.addTrackPoint(track[i].lat, track[i].lon);
+        }
+        lastTrackIndex = track.length;
+
         var status = "searching";
         var text = "GPS SEARCHING";
 

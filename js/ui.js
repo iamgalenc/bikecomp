@@ -21,6 +21,7 @@
         els.btnPause = document.getElementById("btn-pause");
         els.btnResume = document.getElementById("btn-resume");
         els.btnStop = document.getElementById("btn-stop");
+        els.btnMap = document.getElementById("btn-map");
         els.permissionBanner = document.getElementById("permission-banner");
     }
 

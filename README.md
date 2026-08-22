@@ -10,12 +10,17 @@ Uses the browser's Geolocation API to display:
 - Average / max speed
 - Elevation, elevation gain, elevation loss
 - GPS accuracy and status
+- Optional live GPS map with ride track (Leaflet + CARTO dark tiles)
 
 ## Usage
 
 Open `index.html` in a browser with HTTPS or on `localhost` (Geolocation requires a secure context).
 
 Press **START** to request location permission and begin tracking.
+
+Tap **MAP** to show/hide the live GPS map. The map is optional —
+speed, distance, time, and elevation all work without it, and the app
+continues normally if the map tiles can't load (e.g. offline).
 
 ## Deploy to GitHub Pages
 
@@ -47,6 +52,7 @@ css/style.css       Dark responsive UI
 js/gps.js           Geolocation wrapper
 js/ride.js          GPS processing + calculations
 js/ui.js            DOM rendering
+js/map.js           Optional Leaflet map
 js/app.js           Wiring & ride controls
 ```
 
