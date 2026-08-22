@@ -22,7 +22,21 @@
         els.btnResume = document.getElementById("btn-resume");
         els.btnStop = document.getElementById("btn-stop");
         els.btnFullscreen = document.getElementById("btn-fullscreen");
+        els.systemClock = document.getElementById("system-clock");
         els.permissionBanner = document.getElementById("permission-banner");
+    }
+
+    function formatClock(date) {
+        var h = date.getHours();
+        var m = date.getMinutes();
+        return (h < 10 ? "0" + h : h) + ":" + (m < 10 ? "0" + m : m);
+    }
+
+    function updateClock() {
+        var text = formatClock(new Date());
+        if (els.systemClock.textContent !== text) {
+            els.systemClock.textContent = text;
+        }
     }
 
     function formatTime(seconds) {
@@ -117,6 +131,7 @@
         updateDashboard: updateDashboard,
         setGpsStatus: setGpsStatus,
         showPermissionBanner: showPermissionBanner,
+        updateClock: updateClock,
         els: function () { return els; }
     };
 })();

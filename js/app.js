@@ -30,6 +30,7 @@
 
         UI.showPermissionBanner(false);
         UI.setGpsStatus("off", "GPS OFF");
+        UI.updateClock();
 
         startClock();
     }
@@ -195,6 +196,7 @@
         clockInterval = setInterval(function () {
             processor.updateElapsedTime(Date.now());
             UI.updateDashboard(processor.state);
+            UI.updateClock();
         }, 1000);
     }
 
