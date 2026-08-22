@@ -21,10 +21,26 @@
         if (!this.isSupported()) return;
 
         try {
+            /* guarantee the container has real dimensions before Leaflet init */
+            var container = document.getElementById("map");
+            container.style.width = "100vw";
+            container.style.height = "100vh";
+
             this._map = L.map("map", {
                 zoomControl: true,
                 attributionControl: true
             }).setView([0, 0], 16);
+
+            /* keep map sized correctly on resize/orientation change */
+            var self = this;
+            window.addEventListener("resize", function () {
+                self.invalidate();
+            });
+            window.addEventListener("orientationchange", function () {
+                setTimeout(function () {
+                    self.invalidate();
+                }, 200);
+            });
 
             L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
                 attribution: "&copy; OpenStreetMap contributors &copy; CARTO",

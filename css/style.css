@@ -25,23 +25,32 @@ body {
     display: none !important;
 }
 
-/* ---- Map: full-screen background ---- */
+/* ---- Map: fills the whole screen ---- */
 .map-panel {
     position: fixed;
-    inset: 0;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     z-index: 0;
     background: #000000;
 }
 
 #map {
-    position: absolute;
-    inset: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
     background: #000000;
 }
 
 /* ---- Top bar: GPS status (overlay) ---- */
 .topbar {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
     z-index: 2;
     display: flex;
     justify-content: space-between;
@@ -54,7 +63,6 @@ body {
     font-size: 11px;
     font-weight: 600;
     letter-spacing: 1px;
-    flex-shrink: 0;
 }
 
 .gps-status {
@@ -83,13 +91,16 @@ body {
 
 /* ---- Dashboard: overlay on top of map ---- */
 .dashboard {
-    position: relative;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 1;
-    flex: 1;
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    padding: 10px 12px;
+    padding: 48px 12px 80px;
     gap: 8px;
     overflow-y: auto;
     pointer-events: none;   /* let map pan/zoom through empty areas */
@@ -161,7 +172,10 @@ body {
 
 /* ---- Controls (overlay) ---- */
 .controls {
-    position: relative;
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 2;
     padding: 8px 12px;
     padding-bottom: calc(8px + env(safe-area-inset-bottom));
@@ -172,7 +186,6 @@ body {
     backdrop-filter: blur(4px);
     -webkit-backdrop-filter: blur(4px);
     border-top: 1px solid rgba(255, 255, 255, 0.15);
-    flex-shrink: 0;
 }
 
 .btn {
@@ -265,7 +278,7 @@ body {
         flex-wrap: wrap;
         align-items: center;
         gap: 6px;
-        padding: 6px;
+        padding: 40px 6px 70px;
     }
 
     .speed-panel {

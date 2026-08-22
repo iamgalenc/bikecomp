@@ -18,7 +18,10 @@
         els.btnStop.addEventListener("click", onStop);
 
         MapModule.init();
-        MapModule.invalidate();
+        /* wait for layout before sizing the map */
+        setTimeout(function () {
+            MapModule.invalidate();
+        }, 100);
 
         UI.showPermissionBanner(false);
         UI.setGpsStatus("off", "GPS OFF");
