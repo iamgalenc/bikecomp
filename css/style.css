@@ -1,4 +1,4 @@
-/* Bike Computer - Dark dashboard UI */
+/* Bike Computer - AMOLED black/white dashboard */
 * {
     margin: 0;
     padding: 0;
@@ -10,9 +10,9 @@ html, body {
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: #111418;
-    color: #e8eaed;
+    font-family: "Orbitron", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background: #000000;
+    color: #ffffff;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -29,12 +29,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 16px;
-    background: #1a1e24;
-    border-bottom: 1px solid #2a2f38;
-    font-size: 13px;
+    padding: 6px 14px;
+    background: #000000;
+    border-bottom: 1px solid #222222;
+    font-size: 11px;
     font-weight: 600;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
     flex-shrink: 0;
 }
 
@@ -45,20 +45,20 @@ body {
 }
 
 .dot {
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
     border-radius: 50%;
-    background: #6c757d;
+    background: #555555;
     flex-shrink: 0;
 }
 
 .dot.searching { background: #ffc107; }
-.dot.active    { background: #28a745; }
-.dot.weak      { background: #fd7e14; }
-.dot.error     { background: #dc3545; }
+.dot.active    { background: #00ff00; }
+.dot.weak      { background: #ff8800; }
+.dot.error     { background: #ff0000; }
 
 .gps-accuracy {
-    color: #9aa0a6;
+    color: #aaaaaa;
     font-variant-numeric: tabular-nums;
 }
 
@@ -68,133 +68,135 @@ body {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
-    padding: 16px;
-    gap: 12px;
+    padding: 10px 12px;
+    gap: 8px;
     overflow-y: auto;
 }
 
 /* Speed panel */
 .speed-panel {
     text-align: center;
-    padding: 12px 0;
+    padding: 4px 0;
 }
 
 .speed-value {
-    font-size: clamp(72px, 22vw, 140px);
-    font-weight: 700;
+    font-size: clamp(64px, 20vw, 120px);
+    font-weight: 800;
     line-height: 1;
     font-variant-numeric: tabular-nums;
+    letter-spacing: 2px;
 }
 
 .speed-unit {
-    font-size: 18px;
-    color: #9aa0a6;
+    font-size: 14px;
+    color: #aaaaaa;
     font-weight: 500;
-    letter-spacing: 2px;
-    margin-top: 4px;
+    letter-spacing: 3px;
+    margin-top: 2px;
 }
 
 /* Metric rows */
 .row {
     display: flex;
     justify-content: space-between;
-    gap: 12px;
+    gap: 8px;
 }
 
 .metric {
     flex: 1;
     text-align: center;
-    background: #1a1e24;
-    border-radius: 10px;
-    padding: 10px 6px;
+    background: #0a0a0a;
+    border: 1px solid #1a1a1a;
+    border-radius: 8px;
+    padding: 6px 4px;
 }
 
 .metric-value {
-    font-size: 24px;
+    font-size: 20px;
     font-weight: 600;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+    letter-spacing: 1px;
 }
 
 .metric-label {
-    font-size: 11px;
-    color: #9aa0a6;
-    letter-spacing: 1px;
+    font-size: 9px;
+    color: #888888;
+    letter-spacing: 1.5px;
     margin-top: 2px;
 }
 
 /* Distance + time row uses larger numbers */
 .distance-time .metric-value {
-    font-size: 32px;
+    font-size: 28px;
 }
 
 /* ---- Controls ---- */
 .controls {
-    padding: 12px 16px;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
+    padding: 8px 12px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
     display: flex;
-    gap: 10px;
+    gap: 8px;
     justify-content: center;
-    background: #1a1e24;
-    border-top: 1px solid #2a2f38;
+    background: #000000;
+    border-top: 1px solid #222222;
     flex-shrink: 0;
 }
 
 .btn {
     flex: 1;
-    max-width: 220px;
-    padding: 16px 12px;
-    font-size: 16px;
+    max-width: 200px;
+    padding: 12px 8px;
+    font-family: "Orbitron", sans-serif;
+    font-size: 13px;
     font-weight: 700;
     letter-spacing: 1px;
-    border: none;
-    border-radius: 12px;
-    color: #fff;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    color: #ffffff;
+    background: #0a0a0a;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     transition: filter 0.15s;
 }
 
-.btn:active { filter: brightness(0.85); }
+.btn:active { filter: brightness(1.6); }
 
-.btn-start  { background: #28a745; }
-.btn-pause  { background: #ffc107; color: #111418; }
-.btn-resume { background: #17a2b8; }
-.btn-stop   { background: #dc3545; }
+.btn-start  { border-color: #00ff00; color: #00ff00; }
+.btn-pause  { border-color: #ffc107; color: #ffc107; }
+.btn-resume { border-color: #00ccff; color: #00ccff; }
+.btn-stop   { border-color: #ff0000; color: #ff0000; }
+.btn-map    { border-color: #ffffff; color: #ffffff; }
 
 /* ---- Map panel ---- */
 .map-panel {
     flex-shrink: 0;
-    height: 45vh;
-    max-height: 380px;
-    border-top: 1px solid #2a2f38;
-    background: #1a1e24;
+    height: 40vh;
+    max-height: 320px;
+    border-top: 1px solid #222222;
+    background: #000000;
     position: relative;
 }
 
 #map {
     position: absolute;
     inset: 0;
-    background: #1a1e24;
-}
-
-.btn-map {
-    background: #6f42c1;
+    background: #000000;
 }
 
 /* Custom position marker */
 .position-marker {
-    width: 18px;
-    height: 18px;
-    background: #28a745;
-    border: 3px solid #fff;
+    width: 16px;
+    height: 16px;
+    background: #00ff00;
+    border: 3px solid #ffffff;
     border-radius: 50%;
-    box-shadow: 0 0 8px rgba(40, 167, 69, 0.8);
+    box-shadow: 0 0 10px rgba(0, 255, 0, 0.9);
 }
 
 /* Ride track line */
 .ride-track {
-    stroke: #17a2b8;
+    stroke: #00ccff;
     stroke-width: 4;
     stroke-opacity: 0.9;
     stroke-linejoin: round;
@@ -204,24 +206,24 @@ body {
 
 /* Dark Leaflet tiles */
 .leaflet-container {
-    background: #1a1e24;
+    background: #000000;
     font-family: inherit;
 }
 
-/* Keep map controls visible on dark background */
+/* Keep map controls visible on black background */
 .leaflet-bar a {
-    background: #2a2f38;
-    color: #e8eaed;
-    border-color: #3a4150;
+    background: #0a0a0a;
+    color: #ffffff;
+    border-color: #333333;
 }
 
 .leaflet-control-attribution {
-    background: rgba(26, 30, 36, 0.7) !important;
-    color: #9aa0a6 !important;
+    background: rgba(0, 0, 0, 0.7) !important;
+    color: #888888 !important;
 }
 
 .leaflet-control-attribution a {
-    color: #9aa0a6 !important;
+    color: #888888 !important;
 }
 
 /* ---- Permission banner ---- */
@@ -229,13 +231,13 @@ body {
     position: fixed;
     left: 16px;
     right: 16px;
-    bottom: 90px;
-    background: #3d2f00;
-    border: 1px solid #8a6d00;
+    bottom: 80px;
+    background: #1a1a00;
+    border: 1px solid #ffc107;
     color: #ffd75e;
-    padding: 12px 16px;
-    border-radius: 10px;
-    font-size: 14px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 12px;
     text-align: center;
     z-index: 10;
 }
@@ -246,17 +248,17 @@ body {
         flex-direction: row;
         flex-wrap: wrap;
         align-items: center;
-        gap: 8px;
-        padding: 8px;
+        gap: 6px;
+        padding: 6px;
     }
 
     .speed-panel {
         flex-basis: 100%;
-        padding: 4px 0;
+        padding: 2px 0;
     }
 
     .speed-value {
-        font-size: clamp(48px, 14vh, 90px);
+        font-size: clamp(44px, 13vh, 80px);
     }
 
     .row {
@@ -265,14 +267,14 @@ body {
     }
 
     .distance-time .metric-value {
-        font-size: 26px;
+        font-size: 22px;
     }
 
     .metric-value {
-        font-size: 20px;
+        font-size: 16px;
     }
 
     .metric {
-        padding: 6px;
+        padding: 4px;
     }
 }

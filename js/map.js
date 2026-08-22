@@ -57,15 +57,8 @@
         this._accuracyCircle.setLatLng([lat, lon]);
         this._accuracyCircle.setRadius(typeof accuracy === "number" ? accuracy : 0);
 
-        /* avoid recentering every update - only if user moved far or first fix */
-        var now = Date.now();
-        var shouldCenter = !this._lastCentered ||
-                (this._lastCentered && (now - this._lastCentered > 5000));
-
-        if (shouldCenter) {
-            this._map.panTo([lat, lon]);
-            this._lastCentered = now;
-        }
+        /* always keep the pin centered */
+        this._map.panTo([lat, lon]);
     };
 
     MapModule.addTrackPoint = function (lat, lon) {
