@@ -89,6 +89,60 @@ body {
     font-variant-numeric: tabular-nums;
 }
 
+/* ---- Battery indicator ---- */
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.battery {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+}
+
+.battery-icon {
+    display: inline-block;
+    width: 22px;
+    height: 11px;
+    border: 1px solid #888888;
+    border-radius: 2px;
+    padding: 1px;
+    position: relative;
+}
+
+.battery-icon::after {
+    content: "";
+    position: absolute;
+    right: -4px;
+    top: 2px;
+    width: 2px;
+    height: 5px;
+    background: #888888;
+    border-radius: 0 1px 1px 0;
+}
+
+.battery-level {
+    display: block;
+    height: 100%;
+    border-radius: 1px;
+    transition: width 0.3s, background-color 0.3s;
+}
+
+.battery.good .battery-level { background: #00ff00; }
+.battery.low .battery-level  { background: #ffc107; }
+.battery.crit .battery-level { background: #ff0000; }
+.battery.charging .battery-level { background: #00ccff; }
+
+.battery.good { color: #00ff00; }
+.battery.low  { color: #ffc107; }
+.battery.crit { color: #ff0000; }
+.battery.charging { color: #00ccff; }
+
 .system-clock {
     font-size: 20px;
     font-weight: 600;

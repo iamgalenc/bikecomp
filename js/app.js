@@ -32,7 +32,29 @@
         UI.setGpsStatus("off", "GPS OFF");
         UI.updateClock();
 
+        initBattery();
         startClock();
+    }
+
+    function initBattery() {
+        if (!navigator.getBattery) {
+            /* Battery API unsupported - indicator stays hidden */
+            return;
+        }
+
+        navigator.getBattery().then(function (bat) {
+            var update = function () {
+                UI.updateBattery(bat.level, bat.charging);
+            };
+
+            update();
+            UI.showBattery(true);
+
+            bat.addEventListener("levelchange", update);
+            bat.addEventListener("chargingchange", update);
+        }).catch(function () {
+            /* battery info unavailable - indicator stays hidden */
+        });
     }
 
     function isFullscreenSupported() {

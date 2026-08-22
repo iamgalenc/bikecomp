@@ -23,7 +23,45 @@
         els.btnStop = document.getElementById("btn-stop");
         els.btnFullscreen = document.getElementById("btn-fullscreen");
         els.systemClock = document.getElementById("system-clock");
+        els.battery = document.getElementById("battery");
+        els.batteryLevel = document.getElementById("battery-level");
+        els.batteryText = document.getElementById("battery-text");
         els.permissionBanner = document.getElementById("permission-banner");
+    }
+
+    function updateBattery(level, charging) {
+        var pct = Math.round(level * 100);
+        var text = (charging ? "⚡" : "") + pct + "%";
+
+        if (els.batteryText.textContent !== text) {
+            els.batteryText.textContent = text;
+        }
+        if (els.batteryLevel.style.width !== pct + "%") {
+            els.batteryLevel.style.width = pct + "%";
+        }
+
+        var cls = "battery ";
+        if (charging) {
+            cls += "charging";
+        } else if (pct <= 20) {
+            cls += "crit";
+        } else if (pct <= 50) {
+            cls += "low";
+        } else {
+            cls += "good";
+        }
+
+        if (els.battery.className !== cls) {
+            els.battery.className = cls;
+        }
+    }
+
+    function showBattery(show) {
+        if (show) {
+            els.battery.classList.remove("hidden");
+        } else {
+            els.battery.classList.add("hidden");
+        }
     }
 
     function formatClock(date) {
@@ -132,6 +170,8 @@
         setGpsStatus: setGpsStatus,
         showPermissionBanner: showPermissionBanner,
         updateClock: updateClock,
+        updateBattery: updateBattery,
+        showBattery: showBattery,
         els: function () { return els; }
     };
 })();
