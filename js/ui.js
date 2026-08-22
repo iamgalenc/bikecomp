@@ -21,7 +21,8 @@
         els.btnPause = document.getElementById("btn-pause");
         els.btnResume = document.getElementById("btn-resume");
         els.btnStop = document.getElementById("btn-stop");
-        els.btnFullscreen = document.getElementById("btn-fullscreen");
+        els.btnFull = document.getElementById("btn-full");
+        els.btnWide = document.getElementById("btn-wide");
         els.systemClock = document.getElementById("system-clock");
         els.battery = document.getElementById("battery");
         els.batteryLevel = document.getElementById("battery-level");

@@ -16,10 +16,16 @@
         els.btnPause.addEventListener("click", onPause);
         els.btnResume.addEventListener("click", onResume);
         els.btnStop.addEventListener("click", onStop);
-        els.btnFullscreen.addEventListener("click", onToggleFullscreen);
+        els.btnFull.addEventListener("click", function () {
+            onToggleFullscreen("portrait");
+        });
+        els.btnWide.addEventListener("click", function () {
+            onToggleFullscreen("landscape");
+        });
 
         if (!isFullscreenSupported()) {
-            els.btnFullscreen.classList.add("hidden");
+            els.btnFull.classList.add("hidden");
+            els.btnWide.classList.add("hidden");
         }
 
         MapModule.init();
@@ -64,21 +70,53 @@
                   document.documentElement.msRequestFullscreen);
     }
 
-    function onToggleFullscreen() {
+    function onToggleFullscreen(orientation) {
         var doc = document;
         var el = doc.documentElement;
 
         if (doc.fullscreenElement || doc.webkitFullscreenElement ||
             doc.mozFullScreenElement || doc.msFullscreenElement) {
+            unlockOrientation();
             if (doc.exitFullscreen) doc.exitFullscreen();
             else if (doc.webkitExitFullscreen) doc.webkitExitFullscreen();
             else if (doc.mozCancelFullScreen) doc.mozCancelFullScreen();
             else if (doc.msExitFullscreen) doc.msExitFullscreen();
         } else {
-            if (el.requestFullscreen) el.requestFullscreen();
-            else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
-            else if (el.mozRequestFullScreen) el.mozRequestFullScreen();
-            else if (el.msRequestFullscreen) el.msRequestFullscreen();
+            var request = el.requestFullscreen || el.webkitRequestFullscreen ||
+                          el.mozRequestFullScreen || el.msRequestFullscreen;
+            var result = request.call(el);
+
+            /* lock orientation after entering fullscreen (Chrome/Android) */
+            if (result && result.then) {
+                result.then(function () {
+                    lockOrientation(orientation);
+                }).catch(function () {});
+            } else {
+                setTimeout(function () {
+                    lockOrientation(orientation);
+                }, 300);
+            }
+        }
+    }
+
+    function lockOrientation(orientation) {
+        var so = screen.orientation || screen.mozOrientation || screen.msOrientation;
+        if (so && so.lock) {
+            try {
+                var p = so.lock(orientation);
+                if (p && p.catch) p.catch(function () {});
+            } catch (e) {
+                /* orientation lock unsupported - fullscreen still works */
+            }
+        }
+    }
+
+    function unlockOrientation() {
+        var so = screen.orientation || screen.mozOrientation || screen.msOrientation;
+        if (so && so.unlock) {
+            try {
+                so.unlock();
+            } catch (e) {}
         }
     }
 
