@@ -276,32 +276,45 @@ body {
 .btn-resume { border-color: #00ccff; color: #00ccff; }
 .btn-stop   { border-color: #ff0000; color: #ff0000; }
 .btn-map    { border-color: #ffffff; color: #ffffff; }
+.btn-sun    { border-color: #ffd75e; color: #ffd75e; }
+.btn-sun.on { background: rgba(255, 215, 94, 0.25); }
 .btn-fullscreen { border-color: #ffffff; color: #ffffff; max-width: 120px; flex: 0 0 auto; padding: 12px 16px; }
 
 /* ---- Custom position marker ---- */
 .position-marker {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
     background: #00ff00;
     border: 3px solid #ffffff;
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(0, 255, 0, 0.9);
+    box-shadow: 0 0 12px rgba(0, 255, 0, 1), 0 0 24px rgba(0, 255, 0, 0.6);
 }
 
-/* Ride track line */
+/* Ride track line - thick with glow so it stands out on any tile style */
 .ride-track {
-    stroke: #00ccff;
-    stroke-width: 4;
-    stroke-opacity: 0.9;
+    stroke: #00e5ff;
+    stroke-width: 5;
+    stroke-opacity: 0.95;
     stroke-linejoin: round;
     stroke-linecap: round;
     fill: none;
+    filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.8));
 }
 
 /* Dark Leaflet tiles */
 .leaflet-container {
     background: #000000;
     font-family: inherit;
+}
+
+/* Boost tile visibility at night: brighter, higher contrast roads/labels */
+.leaflet-tile-pane {
+    filter: brightness(1.45) contrast(1.2) saturate(1.25);
+}
+
+/* Sunlight mode: push tiles much brighter so the screen stays readable outdoors */
+body.sunlight .leaflet-tile-pane {
+    filter: brightness(2.1) contrast(1.4) saturate(1.6);
 }
 
 /* Keep map controls visible on black background */

@@ -16,6 +16,8 @@
         els.btnPause.addEventListener("click", onPause);
         els.btnResume.addEventListener("click", onResume);
         els.btnStop.addEventListener("click", onStop);
+        els.btnSun.addEventListener("click", onToggleSunlight);
+
         els.btnFull.addEventListener("click", function () {
             onToggleFullscreen("portrait");
         });
@@ -61,6 +63,11 @@
         }).catch(function () {
             /* battery info unavailable - indicator stays hidden */
         });
+    }
+
+    function onToggleSunlight() {
+        var on = document.body.classList.toggle("sunlight");
+        UI.els().btnSun.classList.toggle("on", on);
     }
 
     function isFullscreenSupported() {
