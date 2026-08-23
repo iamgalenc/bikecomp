@@ -271,6 +271,26 @@ body {
 
 .btn:active { filter: brightness(1.6); }
 
+/* Icon buttons - square, SVG glyph inherits button color */
+.icon-btn {
+    flex: 0 0 auto;
+    max-width: none;
+    width: 52px;
+    height: 44px;
+    padding: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.icon-btn svg {
+    width: 22px;
+    height: 22px;
+    fill: currentColor;
+    stroke: currentColor;
+    pointer-events: none;
+}
+
 .btn-start  { border-color: #00ff00; color: #00ff00; }
 .btn-pause  { border-color: #ffc107; color: #ffc107; }
 .btn-resume { border-color: #00ccff; color: #00ccff; }
@@ -278,7 +298,7 @@ body {
 .btn-map    { border-color: #ffffff; color: #ffffff; }
 .btn-sun    { border-color: #ffd75e; color: #ffd75e; }
 .btn-sun.on { background: rgba(255, 215, 94, 0.25); }
-.btn-fullscreen { border-color: #ffffff; color: #ffffff; max-width: 120px; flex: 0 0 auto; padding: 12px 16px; }
+.btn-fullscreen { border-color: #ffffff; color: #ffffff; }
 
 /* ---- Custom position marker ---- */
 .position-marker {
