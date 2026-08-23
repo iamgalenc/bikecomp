@@ -327,14 +327,73 @@ body {
     font-family: inherit;
 }
 
-/* Boost tile visibility at night: brighter, higher contrast roads/labels */
-.leaflet-tile-pane {
+/* Dark mode: boost tile contrast, brightness, and saturation for readability */
+body:not(.light) .leaflet-tile-pane {
     filter: brightness(1.45) contrast(1.2) saturate(1.25);
 }
 
-/* Sunlight mode: push tiles much brighter so the screen stays readable outdoors */
-body.sunlight .leaflet-tile-pane {
-    filter: brightness(2.1) contrast(1.4) saturate(1.6);
+/* ---- Light mode: light tiles + light UI ---- */
+body.light {
+    background: #f2f2f2;
+    color: #111111;
+}
+
+body.light .leaflet-tile-pane {
+    filter: brightness(1) contrast(1.05) saturate(1.1);
+}
+
+body.light .topbar,
+body.light .controls {
+    background: rgba(255, 255, 255, 0.75);
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+body.light .metric {
+    background: rgba(255, 255, 255, 0.7);
+    border-color: rgba(0, 0, 0, 0.12);
+}
+
+body.light .metric-label { color: #555555; }
+body.light .speed-unit   { color: #444444; }
+body.light .system-clock { color: #333333; text-shadow: none; }
+body.light .gps-accuracy { color: #555555; }
+
+body.light .speed-value {
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.6);
+}
+
+body.light .btn {
+    color: #111111;
+    border-color: #bbbbbb;
+    background: rgba(255, 255, 255, 0.85);
+}
+
+body.light .btn-start  { border-color: #008800; color: #008800; }
+body.light .btn-pause  { border-color: #b58900; color: #b58900; }
+body.light .btn-resume { border-color: #0077aa; color: #0077aa; }
+body.light .btn-stop   { border-color: #cc0000; color: #cc0000; }
+body.light .btn-sun    { border-color: #e6a700; color: #e6a700; }
+body.light .btn-sun.on { background: rgba(230, 167, 0, 0.25); }
+body.light .btn-fullscreen { border-color: #666666; color: #666666; }
+
+body.light .ride-track {
+    stroke: #0077cc;
+    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.9));
+}
+
+body.light .leaflet-bar a {
+    background: rgba(255, 255, 255, 0.85);
+    color: #222222;
+    border-color: #bbbbbb;
+}
+
+body.light .leaflet-control-attribution {
+    background: rgba(255, 255, 255, 0.7) !important;
+    color: #777777 !important;
+}
+
+body.light .leaflet-control-attribution a {
+    color: #777777 !important;
 }
 
 /* Keep map controls visible on black background */

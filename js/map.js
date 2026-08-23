@@ -10,7 +10,14 @@
         _accuracyCircle: null,
         _track: null,
         _points: [],
-        _lastCentered: null
+        _lastCentered: null,
+        _tileLayers: {},
+        _mode: "dark"
+    };
+
+    var TILE_URLS = {
+        dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
+        light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
     };
 
     MapModule.isSupported = function () {
@@ -42,11 +49,13 @@
                 }, 200);
             });
 
-            L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+            var tileOpts = {
                 attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
                 subdomains: "abcd",
                 maxZoom: 20
-            }).addTo(this._map);
+            };
+            this._tileLayers.dark = L.tileLayer(TILE_URLS.dark, tileOpts).addTo(this._map);
+            this._tileLayers.light = L.tileLayer(TILE_URLS.light, tileOpts);
 
             var icon = L.divIcon({
                 className: "",
@@ -64,6 +73,16 @@
             /* map failed, ride continues without it */
             this.enabled = false;
         }
+    };
+
+    MapModule.setMode = function (mode) {
+        if (!this.enabled || !this._tileLayers[mode] || mode === this._mode) return;
+
+        this._map.removeLayer(this._tileLayers[this._mode]);
+        this._tileLayers[mode].addTo(this._map);
+        /* tiles must be re-checked after being re-added */
+        this._tileLayers[mode].redraw();
+        this._mode = mode;
     };
 
     MapModule.updatePosition = function (lat, lon, accuracy) {

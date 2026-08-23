@@ -16,7 +16,7 @@
         els.btnPause.addEventListener("click", onPause);
         els.btnResume.addEventListener("click", onResume);
         els.btnStop.addEventListener("click", onStop);
-        els.btnSun.addEventListener("click", onToggleSunlight);
+        els.btnSun.addEventListener("click", onToggleTheme);
 
         els.btnFull.addEventListener("click", function () {
             onToggleFullscreen("portrait");
@@ -65,9 +65,10 @@
         });
     }
 
-    function onToggleSunlight() {
-        var on = document.body.classList.toggle("sunlight");
-        UI.els().btnSun.classList.toggle("on", on);
+    function onToggleTheme() {
+        var light = document.body.classList.toggle("light");
+        UI.els().btnSun.classList.toggle("on", light);
+        MapModule.setMode(light ? "light" : "dark");
     }
 
     function isFullscreenSupported() {
