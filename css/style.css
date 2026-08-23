@@ -1,4 +1,4 @@
-/* Bike Computer - AMOLED EV-style dashboard with seamless map background */
+/* Bike Computer - flat instrument cluster over live map */
 * {
     margin: 0;
     padding: 0;
@@ -14,9 +14,6 @@ body {
     font-family: "JetBrains Mono", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
     background: #000000;
     color: #ffffff;
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
     -webkit-user-select: none;
     user-select: none;
 }
@@ -28,24 +25,27 @@ body {
 /* ---- Map: fills the whole screen ---- */
 .map-panel {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    inset: 0;
     z-index: 0;
     background: #000000;
 }
 
 #map {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+    position: absolute;
+    inset: 0;
     background: #000000;
 }
 
-/* ---- Top bar: GPS status (overlay) ---- */
+/* Dark mode tiles: boosted for readability */
+body:not(.light) .leaflet-tile-pane {
+    filter: brightness(1.45) contrast(1.2) saturate(1.25);
+}
+
+body.light .leaflet-tile-pane {
+    filter: brightness(1) contrast(1.05) saturate(1.1);
+}
+
+/* ---- Top bar ---- */
 .topbar {
     position: absolute;
     top: 0;
@@ -55,14 +55,11 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 16px;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    padding: 10px 16px;
+    background: #000000;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.14);
     font-size: 11px;
     font-weight: 600;
-    letter-spacing: 1px;
 }
 
 .gps-status {
@@ -72,8 +69,8 @@ body {
 }
 
 .dot {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
     border-radius: 50%;
     background: #555555;
     flex-shrink: 0;
@@ -85,15 +82,15 @@ body {
 .dot.error     { background: #ffffff; animation: blink 1s step-start infinite; }
 
 @keyframes blink {
-    50% { opacity: 0.2; }
+    50% { opacity: 0.15; }
 }
 
 .gps-accuracy {
-    color: #aaaaaa;
+    color: #999999;
     font-variant-numeric: tabular-nums;
 }
 
-/* ---- Battery indicator ---- */
+/* ---- Battery ---- */
 .topbar-right {
     display: flex;
     align-items: center;
@@ -107,6 +104,7 @@ body {
     font-size: 12px;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
+    color: #ffffff;
 }
 
 .battery-icon {
@@ -135,153 +133,140 @@ body {
     height: 100%;
     border-radius: 1px;
     transition: width 0.3s, background-color 0.3s;
+    background: #ffffff;
 }
 
-.battery.good .battery-level,
-.battery.charging .battery-level { background: #ffffff; }
 .battery.low .battery-level  { background: #aaaaaa; }
-.battery.crit .battery-level { background: #ffffff; animation: blink 1s step-start infinite; }
+.battery.crit .battery-level { animation: blink 1s step-start infinite; }
 
-.battery.good,
-.battery.low,
-.battery.crit,
-.battery.charging { color: #ffffff; }
-
-.system-clock {
-    font-size: 20px;
-    font-weight: 600;
-    color: #cccccc;
-    font-variant-numeric: tabular-nums;
-    letter-spacing: 2px;
-    margin-top: 6px;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
-}
-
-/* ---- Dashboard: overlay on top of map ---- */
+/* ---- Dashboard overlay ---- */
 .dashboard {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     z-index: 1;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
-    padding: 48px 12px 80px;
-    gap: 8px;
-    overflow-y: auto;
-    pointer-events: none;   /* let map pan/zoom through empty areas */
+    padding: 56px 16px 76px;
+    pointer-events: none;
 }
 
-/* Speed panel - large, centered, glassy */
-.speed-panel {
+/* Speed hero - the single dominant element */
+.speed-hero {
     text-align: center;
-    padding: 4px 0;
+    margin-top: auto;
     pointer-events: auto;
 }
 
 .speed-value {
-    font-size: clamp(72px, 22vw, 130px);
+    font-size: clamp(96px, 30vw, 190px);
     font-weight: 800;
-    line-height: 1;
+    line-height: 0.95;
     font-variant-numeric: tabular-nums;
-    letter-spacing: 2px;
-    text-shadow: 0 0 20px rgba(0, 0, 0, 0.9), 0 0 40px rgba(0, 0, 0, 0.6);
+    letter-spacing: -2px;
+}
+
+.speed-sub {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 14px;
+    margin-top: 6px;
 }
 
 .speed-unit {
-    font-size: 14px;
-    color: #cccccc;
+    font-size: 15px;
+    color: #bbbbbb;
     font-weight: 500;
-    letter-spacing: 3px;
-    margin-top: 2px;
-    text-shadow: 0 0 10px rgba(0, 0, 0, 0.9);
 }
 
-/* Metric rows - glassy translucent cards */
-.row {
+.system-clock {
+    font-size: 15px;
+    color: #888888;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+}
+
+/* Stat strip - one flat panel, three columns */
+.stat-strip {
     display: flex;
-    justify-content: space-between;
-    gap: 8px;
+    margin-top: 18px;
+    background: #000000;
+    border: 1px solid rgba(255, 255, 255, 0.18);
     pointer-events: auto;
 }
 
-.metric {
+.stat {
     flex: 1;
     text-align: center;
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    border-radius: 10px;
-    padding: 6px 4px;
+    padding: 10px 4px 12px;
 }
 
-.metric-value {
-    font-size: 20px;
-    font-weight: 600;
+.stat + .stat {
+    border-left: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.stat-value {
+    font-size: clamp(20px, 6vw, 30px);
+    font-weight: 700;
     font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-    letter-spacing: 1px;
+    line-height: 1.1;
 }
 
-.metric-label {
-    font-size: 9px;
-    color: #aaaaaa;
-    letter-spacing: 1.5px;
+.stat-label {
+    font-size: 10px;
+    color: #888888;
     margin-top: 2px;
 }
 
-/* Distance + time row uses larger numbers */
-.distance-time .metric-value {
-    font-size: 28px;
+/* Substats - one quiet line */
+.substats {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 4px 16px;
+    margin-top: 10px;
+    font-size: 12px;
+    color: #999999;
+    pointer-events: auto;
 }
 
-/* ---- Controls (overlay) ---- */
+.substats b {
+    color: #ffffff;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---- Controls ---- */
 .controls {
     position: absolute;
     left: 0;
     right: 0;
     bottom: 0;
     z-index: 2;
-    padding: 8px 12px;
-    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+    padding: 10px 12px;
+    padding-bottom: calc(10px + env(safe-area-inset-bottom));
     display: flex;
     gap: 8px;
     justify-content: center;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    background: #000000;
+    border-top: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 .btn {
-    flex: 1;
-    max-width: 200px;
-    padding: 12px 8px;
-    font-family: "JetBrains Mono", sans-serif;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    border: 1px solid #333333;
-    border-radius: 8px;
+    border: 1px solid #444444;
+    border-radius: 6px;
     color: #ffffff;
-    background: rgba(10, 10, 10, 0.8);
+    background: #0a0a0a;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
     transition: filter 0.15s;
 }
 
-.btn:active { filter: brightness(1.6); }
+.btn:active { filter: brightness(1.7); }
 
-/* Icon buttons - square, SVG glyph inherits button color */
 .icon-btn {
-    flex: 0 0 auto;
-    max-width: none;
-    width: 52px;
-    height: 44px;
-    padding: 8px;
+    width: 50px;
+    height: 42px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -295,36 +280,27 @@ body {
     pointer-events: none;
 }
 
-/* Monochrome buttons */
-.btn-start, .btn-pause, .btn-resume, .btn-stop,
-.btn-map, .btn-sun, .btn-fullscreen {
-    border-color: #ffffff;
-    color: #ffffff;
-}
-
-.btn-sun.on { background: rgba(255, 255, 255, 0.25); }
+.btn-sun.on { background: #ffffff; color: #000000; border-color: #ffffff; }
 
 /* Theme button shows moon in dark mode, sun in light mode */
 .icon-sun { display: none; }
 body.light .icon-sun { display: block; }
 body.light .icon-moon { display: none; }
 
-/* ---- Custom position marker ---- */
+/* ---- Map elements ---- */
 .position-marker {
     width: 18px;
     height: 18px;
     background: #ffffff;
     border: 3px solid #000000;
     border-radius: 50%;
-    box-shadow: 0 0 12px rgba(255, 255, 255, 1), 0 0 24px rgba(255, 255, 255, 0.6);
 }
+
 body.light .position-marker {
     background: #000000;
     border-color: #ffffff;
-    box-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
 }
 
-/* Ride track line - thick with glow so it stands out on any tile style */
 .ride-track {
     stroke: #ffffff;
     stroke-width: 5;
@@ -332,105 +308,23 @@ body.light .position-marker {
     stroke-linejoin: round;
     stroke-linecap: round;
     fill: none;
-    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.9));
 }
 
-/* Dark Leaflet tiles */
+body.light .ride-track {
+    stroke: #000000;
+}
+
 .leaflet-container {
     background: #000000;
     font-family: inherit;
 }
 
-/* Dark mode: boost tile contrast, brightness, and saturation for readability */
-body:not(.light) .leaflet-tile-pane {
-    filter: brightness(1.45) contrast(1.2) saturate(1.25);
-}
-
-/* ---- Light mode: light tiles + light UI ---- */
-body.light {
+body.light .leaflet-container {
     background: #f2f2f2;
-    color: #111111;
 }
 
-body.light .leaflet-tile-pane {
-    filter: brightness(1) contrast(1.05) saturate(1.1);
-}
-
-body.light .topbar,
-body.light .controls {
-    background: rgba(255, 255, 255, 0.75);
-    border-color: rgba(0, 0, 0, 0.15);
-}
-
-body.light .metric {
-    background: rgba(255, 255, 255, 0.7);
-    border-color: rgba(0, 0, 0, 0.12);
-}
-
-body.light .metric-label { color: #555555; }
-body.light .speed-unit   { color: #444444; }
-body.light .system-clock { color: #333333; text-shadow: none; }
-body.light .gps-accuracy { color: #555555; }
-
-body.light .speed-value {
-    text-shadow: 0 0 20px rgba(255, 255, 255, 0.9), 0 0 40px rgba(255, 255, 255, 0.6);
-}
-
-body.light .btn {
-    color: #111111;
-    border-color: #bbbbbb;
-    background: rgba(255, 255, 255, 0.85);
-}
-
-body.light .btn-start, body.light .btn-pause, body.light .btn-resume,
-body.light .btn-stop, body.light .btn-sun, body.light .btn-fullscreen {
-    border-color: #000000;
-    color: #000000;
-}
-
-body.light .btn-sun.on { background: rgba(0, 0, 0, 0.15); }
-
-body.light .ride-track {
-    stroke: #000000;
-    filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.9));
-}
-
-body.light .battery.good,
-body.light .battery.low,
-body.light .battery.crit,
-body.light .battery.charging { color: #000000; }
-
-body.light .battery.good .battery-level,
-body.light .battery.charging .battery-level { background: #000000; }
-body.light .battery.low .battery-level  { background: #555555; }
-body.light .battery.crit .battery-level { background: #000000; }
-
-body.light .battery-icon { border-color: #000000; }
-body.light .battery-icon::after { background: #000000; }
-
-body.light .dot.searching { background: #555555; }
-body.light .dot.active    { background: #000000; }
-body.light .dot.weak      { background: #999999; }
-body.light .dot.error     { background: #000000; }
-
-body.light .leaflet-bar a {
-    background: rgba(255, 255, 255, 0.85);
-    color: #222222;
-    border-color: #bbbbbb;
-}
-
-body.light .leaflet-control-attribution {
-    background: rgba(255, 255, 255, 0.7) !important;
-    color: #777777 !important;
-}
-
-body.light .leaflet-control-attribution a {
-    color: #777777 !important;
-}
-
-/* Keep map controls visible on black background */
 .leaflet-bar a {
-    background: rgba(10, 10, 10, 0.8);
+    background: #0a0a0a;
     color: #ffffff;
     border-color: #333333;
 }
@@ -450,49 +344,113 @@ body.light .leaflet-control-attribution a {
     left: 16px;
     right: 16px;
     bottom: 80px;
-    background: rgba(0, 0, 0, 0.9);
+    background: #000000;
     border: 1px solid #ffffff;
     color: #ffffff;
     padding: 10px 14px;
-    border-radius: 8px;
+    border-radius: 6px;
     font-size: 12px;
     text-align: center;
     z-index: 10;
 }
 
-/* ---- Landscape: compress panel, fit more on one screen ---- */
+/* ---- Light mode ---- */
+body.light {
+    background: #f2f2f2;
+    color: #111111;
+}
+
+body.light .topbar,
+body.light .controls {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+body.light .gps-accuracy,
+body.light .stat-label,
+body.light .substats,
+body.light .speed-unit,
+body.light .system-clock { color: #666666; }
+
+body.light .substats b { color: #111111; }
+
+body.light .stat-strip {
+    background: #ffffff;
+    border-color: rgba(0, 0, 0, 0.2);
+}
+
+body.light .stat + .stat {
+    border-color: rgba(0, 0, 0, 0.15);
+}
+
+body.light .btn {
+    color: #111111;
+    border-color: #999999;
+    background: #ffffff;
+}
+
+body.light .btn-sun.on { background: #000000; color: #ffffff; border-color: #000000; }
+
+body.light .battery { color: #000000; }
+body.light .battery-icon { border-color: #000000; }
+body.light .battery-icon::after { background: #000000; }
+body.light .battery-level { background: #000000; }
+body.light .battery.low .battery-level { background: #555555; }
+
+body.light .dot.searching { background: #555555; }
+body.light .dot.active    { background: #000000; }
+body.light .dot.weak      { background: #999999; }
+body.light .dot.error     { background: #000000; }
+
+body.light .leaflet-bar a {
+    background: #ffffff;
+    color: #222222;
+    border-color: #bbbbbb;
+}
+
+body.light .leaflet-control-attribution {
+    background: rgba(255, 255, 255, 0.7) !important;
+    color: #777777 !important;
+}
+
+body.light .leaflet-control-attribution a {
+    color: #777777 !important;
+}
+
+/* ---- Landscape ---- */
 @media (orientation: landscape) and (max-height: 480px) {
     .dashboard {
         flex-direction: row;
-        flex-wrap: wrap;
-        align-items: center;
-        gap: 6px;
-        padding: 40px 6px 70px;
+        align-items: flex-end;
+        gap: 16px;
+        padding: 48px 12px 70px;
     }
 
-    .speed-panel {
-        flex-basis: 100%;
-        padding: 2px 0;
+    .speed-hero {
+        margin-top: 0;
+        flex: 0 0 auto;
     }
 
     .speed-value {
-        font-size: clamp(44px, 13vh, 80px);
+        font-size: clamp(60px, 18vh, 110px);
     }
 
-    .row {
+    .speed-sub {
+        flex-direction: column;
+        gap: 2px;
+        align-items: center;
+    }
+
+    .stat-strip {
         flex: 1;
-        flex-wrap: wrap;
+        margin-top: 0;
     }
 
-    .distance-time .metric-value {
-        font-size: 22px;
-    }
-
-    .metric-value {
-        font-size: 16px;
-    }
-
-    .metric {
-        padding: 4px;
+    .substats {
+        flex: 0 0 auto;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+        margin-top: 0;
     }
 }

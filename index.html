@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <meta name="theme-color" content="#000000">
     <title>Bike Computer</title>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=2">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,51 +28,32 @@
     </div>
 
     <main class="dashboard">
-        <section class="speed-panel">
+        <section class="speed-hero">
             <div class="speed-value" id="speed-value">0.0</div>
-            <div class="speed-unit">km/h</div>
-            <div class="system-clock" id="system-clock">--:--</div>
+            <div class="speed-sub"><span class="speed-unit">km/h</span><span class="system-clock" id="system-clock">--:--</span></div>
         </section>
 
-        <section class="row distance-time">
-            <div class="metric">
-                <div class="metric-value" id="distance-value">0.00</div>
-                <div class="metric-label">km · DISTANCE</div>
+        <section class="stat-strip">
+            <div class="stat">
+                <div class="stat-value" id="distance-value">0.00</div>
+                <div class="stat-label">km</div>
             </div>
-            <div class="metric">
-                <div class="metric-value" id="time-value">00:00:00</div>
-                <div class="metric-label">RIDE TIME</div>
+            <div class="stat">
+                <div class="stat-value" id="time-value">00:00:00</div>
+                <div class="stat-label">ride</div>
             </div>
-        </section>
-
-        <section class="row secondary">
-            <div class="metric">
-                <div class="metric-value" id="avg-speed-value">--</div>
-                <div class="metric-label">AVG</div>
-            </div>
-            <div class="metric">
-                <div class="metric-value" id="max-speed-value">--</div>
-                <div class="metric-label">MAX</div>
-            </div>
-            <div class="metric">
-                <div class="metric-value" id="moving-time-value">00:00:00</div>
-                <div class="metric-label">MOVING</div>
+            <div class="stat">
+                <div class="stat-value" id="moving-time-value">00:00:00</div>
+                <div class="stat-label">moving</div>
             </div>
         </section>
 
-        <section class="row secondary">
-            <div class="metric">
-                <div class="metric-value" id="elevation-value">--</div>
-                <div class="metric-label">ELEV m</div>
-            </div>
-            <div class="metric">
-                <div class="metric-value" id="gain-value">--</div>
-                <div class="metric-label">GAIN m</div>
-            </div>
-            <div class="metric">
-                <div class="metric-value" id="loss-value">--</div>
-                <div class="metric-label">LOSS m</div>
-            </div>
+        <section class="substats">
+            <span>avg <b id="avg-speed-value">--</b></span>
+            <span>max <b id="max-speed-value">--</b></span>
+            <span>elev <b id="elevation-value">--</b> m</span>
+            <span>&#9650;<b id="gain-value">--</b></span>
+            <span>&#9660;<b id="loss-value">--</b></span>
         </section>
     </main>
 
@@ -106,10 +87,10 @@
     </div>
 
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script src="js/gps.js"></script>
-    <script src="js/ride.js"></script>
-    <script src="js/ui.js"></script>
-    <script src="js/map.js"></script>
-    <script src="js/app.js"></script>
+    <script src="js/gps.js?v=2"></script>
+    <script src="js/ride.js?v=2"></script>
+    <script src="js/ui.js?v=2"></script>
+    <script src="js/map.js?v=2"></script>
+    <script src="js/app.js?v=2"></script>
 </body>
 </html>
