@@ -79,10 +79,14 @@ body {
     flex-shrink: 0;
 }
 
-.dot.searching { background: #ffc107; }
-.dot.active    { background: #00ff00; }
-.dot.weak      { background: #ff8800; }
-.dot.error     { background: #ff0000; }
+.dot.searching { background: #aaaaaa; }
+.dot.active    { background: #ffffff; }
+.dot.weak      { background: #777777; }
+.dot.error     { background: #ffffff; animation: blink 1s step-start infinite; }
+
+@keyframes blink {
+    50% { opacity: 0.2; }
+}
 
 .gps-accuracy {
     color: #aaaaaa;
@@ -133,15 +137,15 @@ body {
     transition: width 0.3s, background-color 0.3s;
 }
 
-.battery.good .battery-level { background: #00ff00; }
-.battery.low .battery-level  { background: #ffc107; }
-.battery.crit .battery-level { background: #ff0000; }
-.battery.charging .battery-level { background: #00ccff; }
+.battery.good .battery-level,
+.battery.charging .battery-level { background: #ffffff; }
+.battery.low .battery-level  { background: #aaaaaa; }
+.battery.crit .battery-level { background: #ffffff; animation: blink 1s step-start infinite; }
 
-.battery.good { color: #00ff00; }
-.battery.low  { color: #ffc107; }
-.battery.crit { color: #ff0000; }
-.battery.charging { color: #00ccff; }
+.battery.good,
+.battery.low,
+.battery.crit,
+.battery.charging { color: #ffffff; }
 
 .system-clock {
     font-size: 20px;
@@ -291,34 +295,44 @@ body {
     pointer-events: none;
 }
 
-.btn-start  { border-color: #00ff00; color: #00ff00; }
-.btn-pause  { border-color: #ffc107; color: #ffc107; }
-.btn-resume { border-color: #00ccff; color: #00ccff; }
-.btn-stop   { border-color: #ff0000; color: #ff0000; }
-.btn-map    { border-color: #ffffff; color: #ffffff; }
-.btn-sun    { border-color: #ffd75e; color: #ffd75e; }
-.btn-sun.on { background: rgba(255, 215, 94, 0.25); }
-.btn-fullscreen { border-color: #ffffff; color: #ffffff; }
+/* Monochrome buttons */
+.btn-start, .btn-pause, .btn-resume, .btn-stop,
+.btn-map, .btn-sun, .btn-fullscreen {
+    border-color: #ffffff;
+    color: #ffffff;
+}
+
+.btn-sun.on { background: rgba(255, 255, 255, 0.25); }
+
+/* Theme button shows moon in dark mode, sun in light mode */
+.icon-sun { display: none; }
+body.light .icon-sun { display: block; }
+body.light .icon-moon { display: none; }
 
 /* ---- Custom position marker ---- */
 .position-marker {
     width: 18px;
     height: 18px;
-    background: #00ff00;
-    border: 3px solid #ffffff;
+    background: #ffffff;
+    border: 3px solid #000000;
     border-radius: 50%;
-    box-shadow: 0 0 12px rgba(0, 255, 0, 1), 0 0 24px rgba(0, 255, 0, 0.6);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 1), 0 0 24px rgba(255, 255, 255, 0.6);
+}
+body.light .position-marker {
+    background: #000000;
+    border-color: #ffffff;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
 }
 
 /* Ride track line - thick with glow so it stands out on any tile style */
 .ride-track {
-    stroke: #00e5ff;
+    stroke: #ffffff;
     stroke-width: 5;
     stroke-opacity: 0.95;
     stroke-linejoin: round;
     stroke-linecap: round;
     fill: none;
-    filter: drop-shadow(0 0 4px rgba(0, 229, 255, 0.8));
+    filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.9));
 }
 
 /* Dark Leaflet tiles */
@@ -368,18 +382,28 @@ body.light .btn {
     background: rgba(255, 255, 255, 0.85);
 }
 
-body.light .btn-start  { border-color: #008800; color: #008800; }
-body.light .btn-pause  { border-color: #b58900; color: #b58900; }
-body.light .btn-resume { border-color: #0077aa; color: #0077aa; }
-body.light .btn-stop   { border-color: #cc0000; color: #cc0000; }
-body.light .btn-sun    { border-color: #e6a700; color: #e6a700; }
-body.light .btn-sun.on { background: rgba(230, 167, 0, 0.25); }
-body.light .btn-fullscreen { border-color: #666666; color: #666666; }
+body.light .btn-start, body.light .btn-pause, body.light .btn-resume,
+body.light .btn-stop, body.light .btn-sun, body.light .btn-fullscreen {
+    border-color: #000000;
+    color: #000000;
+}
+
+body.light .btn-sun.on { background: rgba(0, 0, 0, 0.15); }
 
 body.light .ride-track {
-    stroke: #0077cc;
+    stroke: #000000;
     filter: drop-shadow(0 0 3px rgba(255, 255, 255, 0.9));
 }
+
+body.light .battery.good,
+body.light .battery.low,
+body.light .battery.crit,
+body.light .battery.charging { color: #000000; }
+
+body.light .dot.searching { background: #555555; }
+body.light .dot.active    { background: #000000; }
+body.light .dot.weak      { background: #999999; }
+body.light .dot.error     { background: #000000; }
 
 body.light .leaflet-bar a {
     background: rgba(255, 255, 255, 0.85);
@@ -418,9 +442,9 @@ body.light .leaflet-control-attribution a {
     left: 16px;
     right: 16px;
     bottom: 80px;
-    background: rgba(26, 26, 0, 0.9);
-    border: 1px solid #ffc107;
-    color: #ffd75e;
+    background: rgba(0, 0, 0, 0.9);
+    border: 1px solid #ffffff;
+    color: #ffffff;
     padding: 10px 14px;
     border-radius: 8px;
     font-size: 12px;
