@@ -400,6 +400,14 @@ body.light .battery.low,
 body.light .battery.crit,
 body.light .battery.charging { color: #000000; }
 
+body.light .battery.good .battery-level,
+body.light .battery.charging .battery-level { background: #000000; }
+body.light .battery.low .battery-level  { background: #555555; }
+body.light .battery.crit .battery-level { background: #000000; }
+
+body.light .battery-icon { border-color: #000000; }
+body.light .battery-icon::after { background: #000000; }
+
 body.light .dot.searching { background: #555555; }
 body.light .dot.active    { background: #000000; }
 body.light .dot.weak      { background: #999999; }
