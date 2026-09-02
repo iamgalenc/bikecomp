@@ -12,13 +12,22 @@
         _points: [],
         _lastCentered: null,
         _tileLayers: {},
-        _mode: "dark"
+        _mode: "dark",
+        _fallbackTiles: false
     };
 
+    /* Leaflet is the map engine - it doesn't ship tiles, so we pick a tile provider.
+       The default below is OpenStreetMap's standard tiles (same as Leaflet's official
+       examples): free, no key required, light style. Optionally, paste a free CARTO key
+       (https://carto.com/basemaps/apikey) to also enable the dark/light tile toggle. */
+    var CARTO_API_KEY = "";
+
     var TILE_URLS = {
-        dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png",
-        light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png"
+        dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=" + CARTO_API_KEY,
+        light: "https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png?key=" + CARTO_API_KEY
     };
+
+    var OSM_TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
 
     MapModule.isSupported = function () {
         return typeof window.L !== "undefined" && document.getElementById("map");
@@ -49,13 +58,26 @@
                 }, 200);
             });
 
-            var tileOpts = {
-                attribution: "&copy; OpenStreetMap contributors &copy; CARTO",
-                subdomains: "abcd",
-                maxZoom: 20
-            };
-            this._tileLayers.dark = L.tileLayer(TILE_URLS.dark, tileOpts).addTo(this._map);
-            this._tileLayers.light = L.tileLayer(TILE_URLS.light, tileOpts);
+            var osmAttribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors";
+
+            if (CARTO_API_KEY !== "") {
+                var cartoOpts = {
+                    attribution: osmAttribution + " &copy; CARTO",
+                    subdomains: "abcd",
+                    maxZoom: 20
+                };
+                this._tileLayers.dark = L.tileLayer(TILE_URLS.dark, cartoOpts).addTo(this._map);
+                this._tileLayers.light = L.tileLayer(TILE_URLS.light, cartoOpts);
+            } else {
+                /* No CARTO key configured - use OSM standard tiles (Leaflet's default, no key needed) */
+                var osmOpts = {
+                    attribution: osmAttribution,
+                    maxZoom: 19
+                };
+                this._fallbackTiles = true;
+                this._tileLayers.dark = L.tileLayer(OSM_TILE_URL, osmOpts).addTo(this._map);
+                this._tileLayers.light = this._tileLayers.dark;
+            }
 
             var icon = L.divIcon({
                 className: "",
@@ -76,7 +98,7 @@
     };
 
     MapModule.setMode = function (mode) {
-        if (!this.enabled || !this._tileLayers[mode] || mode === this._mode) return;
+        if (!this.enabled || this._fallbackTiles || !this._tileLayers[mode] || mode === this._mode) return;
 
         this._map.removeLayer(this._tileLayers[this._mode]);
         this._tileLayers[mode].addTo(this._map);

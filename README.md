@@ -22,6 +22,13 @@ Tap **MAP** to show/hide the live GPS map. The map is optional —
 speed, distance, time, and elevation all work without it, and the app
 continues normally if the map tiles can't load (e.g. offline).
 
+## Map tiles
+
+The map renders with Leaflet and uses OpenStreetMap's standard tiles by
+default — free, no API key required. CARTO's dark/light tiles are optional:
+CARTO now requires a free key, so if you paste one into the `CARTO_API_KEY`
+constant at the top of `js/map.js`, the dark/light tile toggle is enabled.
+
 ## Deploy to GitHub Pages
 
 ```bash
