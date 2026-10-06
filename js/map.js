@@ -20,7 +20,7 @@
        The default below is OpenStreetMap's standard tiles (same as Leaflet's official
        examples): free, no key required, light style. Optionally, paste a free CARTO key
        (https://carto.com/basemaps/apikey) to also enable the dark/light tile toggle. */
-    var CARTO_API_KEY = "";
+    var CARTO_API_KEY = "cb1_2rip_1_3383a99a344ca6d992b5b8c9";
 
     var TILE_URLS = {
         dark: "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png?key=" + CARTO_API_KEY,
