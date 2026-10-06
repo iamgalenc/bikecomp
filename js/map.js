@@ -13,7 +13,8 @@
         _lastCentered: null,
         _tileLayers: {},
         _mode: "dark",
-        _fallbackTiles: false
+        _fallbackTiles: false,
+        _tileErrors: 0
     };
 
     /* Leaflet is the map engine - it doesn't ship tiles, so we pick a tile provider.
@@ -28,6 +29,7 @@
     };
 
     var OSM_TILE_URL = "https://tile.openstreetmap.org/{z}/{x}/{y}.png";
+    var OSM_ATTRIBUTION = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors";
 
     MapModule.isSupported = function () {
         return typeof window.L !== "undefined" && document.getElementById("map");
@@ -58,7 +60,7 @@
                 }, 200);
             });
 
-            var osmAttribution = "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors";
+            var osmAttribution = OSM_ATTRIBUTION;
 
             if (CARTO_API_KEY !== "") {
                 var cartoOpts = {
@@ -66,8 +68,11 @@
                     subdomains: "abcd",
                     maxZoom: 20
                 };
+                var onTileError = function () { self._onTileError(); };
                 this._tileLayers.dark = L.tileLayer(TILE_URLS.dark, cartoOpts).addTo(this._map);
+                this._tileLayers.dark.on("tileerror", onTileError);
                 this._tileLayers.light = L.tileLayer(TILE_URLS.light, cartoOpts);
+                this._tileLayers.light.on("tileerror", onTileError);
             } else {
                 /* No CARTO key configured - use OSM standard tiles (Leaflet's default, no key needed) */
                 var osmOpts = {
@@ -105,6 +110,33 @@
         /* tiles must be re-checked after being re-added */
         this._tileLayers[mode].redraw();
         this._mode = mode;
+    };
+
+    /* If CARTO tiles cannot be fetched (no network, blocked, or key rejected),
+       fall back to keyless OpenStreetMap tiles instead of an empty black map. */
+    MapModule._onTileError = function () {
+        if (this._fallbackTiles) return;
+        this._tileErrors++;
+        if (this._tileErrors < 3) return;
+        this._useFallbackTiles();
+    };
+
+    MapModule._useFallbackTiles = function () {
+        if (this._fallbackTiles || !this._map) return;
+        this._fallbackTiles = true;
+
+        this._map.removeLayer(this._tileLayers.dark);
+        if (this._tileLayers.light && this._tileLayers.light !== this._tileLayers.dark) {
+            this._map.removeLayer(this._tileLayers.light);
+        }
+
+        var osmTiles = L.tileLayer(OSM_TILE_URL, {
+            attribution: OSM_ATTRIBUTION,
+            maxZoom: 19
+        }).addTo(this._map);
+
+        this._tileLayers.dark = osmTiles;
+        this._tileLayers.light = osmTiles;
     };
 
     MapModule.updatePosition = function (lat, lon, accuracy) {
