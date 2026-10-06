@@ -36,9 +36,16 @@ body {
     background: #000000;
 }
 
-/* Dark mode tiles: boosted for readability */
+/* Dark mode tiles: CARTO dark tiles are dim, so boost for readability */
 body:not(.light) .leaflet-tile-pane {
     filter: brightness(1.45) contrast(1.2) saturate(1.25);
+}
+
+/* OSM tiles are light by design - when they are the basemap, invert them in
+   dark mode so the map stays dark under the white dashboard text.
+   (Marker and track live in separate panes and are not affected.) */
+body:not(.light) #map.osm-tiles .leaflet-tile-pane {
+    filter: invert(1) hue-rotate(180deg) brightness(0.95) contrast(0.9);
 }
 
 body.light .leaflet-tile-pane {

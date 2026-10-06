@@ -80,6 +80,7 @@
                     maxZoom: 19
                 };
                 this._fallbackTiles = true;
+                this._setOsmTiles(true);
                 this._tileLayers.dark = L.tileLayer(OSM_TILE_URL, osmOpts).addTo(this._map);
                 this._tileLayers.light = this._tileLayers.dark;
             }
@@ -124,6 +125,7 @@
     MapModule._useFallbackTiles = function () {
         if (this._fallbackTiles || !this._map) return;
         this._fallbackTiles = true;
+        this._setOsmTiles(true);
 
         this._map.removeLayer(this._tileLayers.dark);
         if (this._tileLayers.light && this._tileLayers.light !== this._tileLayers.dark) {
@@ -137,6 +139,18 @@
 
         this._tileLayers.dark = osmTiles;
         this._tileLayers.light = osmTiles;
+    };
+
+    /* Flag the map container whenever OSM's light tiles are the basemap, so the
+       dark theme can invert them and keep the white dashboard text readable. */
+    MapModule._setOsmTiles = function (on) {
+        var container = document.getElementById("map");
+        if (!container) return;
+        if (on) {
+            container.classList.add("osm-tiles");
+        } else {
+            container.classList.remove("osm-tiles");
+        }
     };
 
     MapModule.updatePosition = function (lat, lon, accuracy) {
